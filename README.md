@@ -6,6 +6,7 @@ inspection during development.
 In your Magento 2 root directory run:  
 `composer require pmclain/magento2-layoutdebug`  
 `bin/magento setup:upgrade`
+`bin/magento deploy:mode:set developer`
 
 ## Usage
 Append `?xml=true` to any url and the generated layout xml will be returned. The

@@ -3,19 +3,30 @@
 namespace Pmclain\LayoutDebug\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Pmclain\LayoutDebug\Helper\Data;
 
 class Response implements ObserverInterface
 {
+    /** @var Layout */
     protected $layoutObserver;
 
+    /** @var Data */
+    protected $helper;
+
     public function __construct(
-        Layout $layoutObserver
+        Layout $layoutObserver,
+        Data $helper
     ) {
         $this->layoutObserver = $layoutObserver;
+        $this->helper = $helper;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        if (!$this->helper->isEnabled()) {
+            return;
+        }
+
         /** @var \Magento\Framework\App\Request\Http $request */
         $request = $observer->getRequest();
         if ($request->getParam('xml')) {
@@ -29,7 +40,6 @@ class Response implements ObserverInterface
                 $this->layoutObserver->getLayoutXml()
             );
             $response->setContent('<?xml version="1.0" encoding="UTF-8" ?>' . $layout);
-            $debug = 'me';
         }
     }
 }
